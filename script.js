@@ -34,6 +34,11 @@ function AddTask() {
     return;
   }
 
+  if (taskStatus.trim() === "" || taskStatus.trim() === "Set Status") {
+    alert("Status can not Empty and Invalid");
+    return;
+  }
+
   if (date < current_date) {
     alert("Invalid date or date is in the past. Please enter a valid date");
     return;
@@ -46,7 +51,7 @@ function AddTask() {
   displayData(taskObj);
 
   $("#title, #description, #dueDate").val("");
-  $("#status").val("");
+  $("#status").val("Set Status");
 }
 
 function rowAdd(row, t) {
