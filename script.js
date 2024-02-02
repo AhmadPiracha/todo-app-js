@@ -34,23 +34,11 @@ function AddTask() {
     return;
   }
 
-  if (taskStatus === "Set Status") {
-    alert("Invalid Status");
-    return;
-  }
-
   if (date < current_date) {
-    alert(
-      "Invalid date or date is in the past. Please enter a valid date"
-    );
+    alert("Invalid date or date is in the past. Please enter a valid date");
     return;
   }
-  const taskObj = new Task(
-    taskTitle,
-    taskDescription,
-    taskDueDate,
-    taskStatus
-  );
+  const taskObj = new Task(taskTitle, taskDescription, taskDueDate, taskStatus);
 
   // Adding data in List
   tasks.push(taskObj);
@@ -58,94 +46,64 @@ function AddTask() {
   displayData(taskObj);
 
   $("#title, #description, #dueDate").val("");
-  $("#status").val("Set Status");
+  $("#status").val("");
+}
+
+function rowAdd(row, t) {
+  row.html(`
+      <td>${t.id}</td>
+      <td>${t.title}</td>
+      <td>${t.description}</td>
+      <td>${t.dueDate}</td>
+      <td>${t.status}</td>
+      <td>
+        <input class="form-check-input" type="checkbox" id="${t.id}" name="${
+    t.title
+  }" value="${t.status}" onclick="markTask(${t.id})"
+          ${t.status === "Complete" ? "checked" : ""}
+          ${t.status === "Complete" ? (disabled = "disabled") : ""}
+        />
+      </td>
+
+      <td><button class="btn btn-danger" id="${
+        t.id
+      }" type="button" onclick="deleteTask(${t.id});"
+        ${t.status === "Pending" ? "disabled" : ""} >Delete</button></td>`);
 }
 
 function displayData(t) {
-  console.log(t);
   var output = $("#taskList");
-  console.log("output", output);
   var existingRow = $(`#${t.id}`);
-  // var existingRow = $("#"+t.id);
-
   if (existingRow.length) {
-    existingRow.html(`
-    <td>${t.id}</td>
-    <td>${t.title}</td>
-    <td>${t.description}</td>
-    <td>${t.dueDate}</td>
-    <td>${t.status}</td>
-    <td>
-      <input class="form-check-input" type="checkbox" id="${
-        t.id
-      }" name="${t.title}" value="${t.status}" onclick="markTask(${
-      t.id
-    })"  ${
-      t.status === "Complete"
-        ? existingRow.addClass("complete")
-        : existingRow.removeClass("complete")
-    }
-        ${t.status === "Complete" ? "checked" : ""}
-        ${t.status === "Complete" ? (disabled = "disabled") : ""}
-      />
-
-    </td>
-    <td>
-      <button class="btn btn-danger" id="${
-        t.id
-      }" type="button" onclick="deleteTask(${t.id});"
-      ${t.status === "Pending" ? "disabled" : ""}
-      >Delete</button></td>`);
+    rowAdd(existingRow, t);
+    t.status === "Complete"
+      ? existingRow.addClass("complete")
+      : existingRow.removeClass("complete");
   } else {
     const newRow = $("<tr></tr>");
     newRow.attr("id", `${t.id}`);
-    newRow.html(`
-    <td>${t.id}</td>
-    <td>${t.title}</td>
-    <td>${t.description}</td>
-    <td>${t.dueDate}</td>
-    <td>${t.status}</td>
-    <td>
-      <input class="form-check-input" type="checkbox" id="${
-        t.id
-      }" name="${t.title}" value="${t.status}" onclick="markTask(${
-      t.id
-    })" 
-        ${t.status === "Complete" ? "checked" : ""}
-        ${t.status === "Complete" ? (disabled = "disabled") : ""}
-      />
-    </td>
-    <td>
-      <button class="btn btn-danger" id="${
-        t.id
-      }" type="button" onclick="deleteTask(${t.id});" 
-      ${t.status === "Pending" ? "disabled" : ""}
-      >Delete</button>
-    </td>`);
+    rowAdd(newRow, t);
 
+    // Adds at end
     output.append(newRow);
+    // Add at begining
+    // output.prepend(newRow);
 
-    t.status === "Complete"
-      ? newRow.addClass("complete")
-      : "";
+    t.status === "Complete" ? newRow.addClass("complete") : "";
   }
 }
 
 function deleteTask(task_id) {
-  console.log("Delete Task Called");
-  if (tasks.id !== -1) {
-    tasks.splice(tasks.id, 1);
-    const deleteTaskList = document.getElementById(`${task_id}`);
-
-    if (deleteTaskList) {
-      deleteTaskList.remove();
-    }
+  tasks.splice(tasks.id, 1);
+  const deleteTaskList = $("#" + task_id);
+  if (deleteTaskList) {
+    deleteTaskList.remove();
   }
 }
 
 function markTask(task_id) {
   var task = tasks.find((task) => task.id === task_id);
-  var checkbox = document.getElementById(task_id);
+  var checkbox = $("#" + task_id);
 
   if (!checkbox.checked) {
     task.status = "Complete";
