@@ -18,14 +18,13 @@
 
     <title>To-Do List App - JQuery</title>
     <style>
-      body {
+   body {
         background-color: black;
       }
 
       .title-header {
         color: whitesmoke;
       }
-
       label {
         display: block;
         margin-bottom: 5px;
@@ -40,7 +39,9 @@
         border-radius: 4px;
         box-sizing: border-box;
       }
-
+      #taskList {
+        background-color: white;
+      }
       table {
         width: 100%;
         border-collapse: collapse;
@@ -50,11 +51,11 @@
       td {
         text-align: left;
         padding: 8px;
-        color: aqua;
+        color: black;
       }
 
       th {
-        color: blueviolet;
+        color: whitesmoke;
       }
 
       .complete {
@@ -104,6 +105,7 @@
                   aria-label=".form-select-sm example"
                   id="status"
                 >
+                <option selected value="Set Status">Set Status</option>
                   <option value="Pending">Pending</option>
                   <option value="Complete">Complete</option>
                 </select>
